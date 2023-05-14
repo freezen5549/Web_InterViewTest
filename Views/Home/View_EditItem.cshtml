@@ -1,0 +1,26 @@
+﻿@using static Web_InterViewTest.Models.DataBaseManager.ApplicationDbContext;
+@model IEnumerable<VoteItem>
+@{
+    ViewData["Title"] = "View_EditItem";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        @Html.Raw("alert('" + TempData["ErrorMessage"] + "');")
+        ;
+    }
+</script>
+
+<h1>資料編輯</h1>
+
+@foreach (var record in Model)
+{
+    <form method="post" action="/Home/UpdateItem">
+        <input type="hidden" name="itemId" value="@record.Sn" />
+        <label>項目名稱:</label>
+        <input type="text" name="itemName" value="@record.Item" />
+        <br />
+        <button type="submit">更新項目</button>
+    </form>
+}

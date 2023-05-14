@@ -1,23 +1,49 @@
 ﻿@using static Web_InterViewTest.Models.DataBaseManager.ApplicationDbContext;
 @model IEnumerable<VoteRecord_ItemCount>
+
 @{
     ViewData["Title"] = "View_VoteClient";
 }
-
+@Html.ValidationSummary()
 <style>
     .table-cell {
         border: 1px solid black;
         padding: 5px;
     }
+    .stype1
+    {
+        background-color:cornflowerblue;
+    }
+    .stype_HeadCell
+    {
+        border: 1px solid black;
+        padding: 5px;
+        background-color: cornflowerblue;
+    }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        @Html.Raw("alert('" + TempData["ErrorMessage"] + "');")
+        ;
+    }
+</script>
 
+<h1>使用者投票</h1>
 <form method="post" action="/Home/SubmitSelections">
+    <table class="table-cell">
+        <tr>
+            <td class="stype1">投票人</td>
+            <td class="stype1" colspan="2"><input type="text" name="User" /></td>
+        </tr>
+    </table>
     <table class="table-cell">
         <thead>
             <tr>
-                <th class="table-cell">選擇</th>
-                <th class="table-cell">可選項目</th>
-                <th class="table-cell">已被選擇數量</th>
+                <th class="stype_HeadCell">選擇</th>
+                <th class="stype_HeadCell">可選項目</th>
+                <th class="stype_HeadCell">已被選擇數量</th>
             </tr>
         </thead>
         <tbody>

@@ -1,0 +1,58 @@
+﻿@using static Web_InterViewTest.Models.DataBaseManager.ApplicationDbContext;
+@model IEnumerable<VoteItem>
+
+@{
+    ViewData["Title"] = "View_VoteManager";
+}
+
+<style>
+    .table-cell {
+        border: 1px solid black;
+        padding: 5px;
+    }
+    .stype_HeadCell {
+        border: 1px solid black;
+        padding: 5px;
+        background-color: cornflowerblue;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        @Html.Raw("alert('" + TempData["ErrorMessage"] + "');")
+        ;
+    }
+</script>
+
+<h1>使用者項目管理</h1>
+<table class="table-cell">
+    <thead>
+        <tr>
+            <th class="stype_HeadCell">項目編號</th>
+            <th class="stype_HeadCell">項目名稱</th>
+            <th class="stype_HeadCell">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td class="table-cell">@record.Sn</td>
+                <td class="table-cell">@record.Item</td>
+                <td class="table-cell">
+                    <a href="/Home/EditItem?itemId=@record.Sn">編輯</a>
+                    <form method="post" action="/Home/DeleteItem">
+                           <input type="hidden" name="itemId" value="@record.Sn" />
+                            <button type="submit">刪除</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form method="post" action="/Home/AddNewItem">
+    <input type="text" name="newItem" placeholder="輸入新項目名稱" />
+    <button type="submit">新增項目</button>
+</form>
