@@ -79,7 +79,7 @@ BEGIN
 	BEGIN TRY
 		select  Sn
 		from VoteItem
-		where @Item = @Item
+		where Item = @Item
 	COMMIT;
 	END TRY
 	BEGIN CATCH
@@ -133,6 +133,31 @@ BEGIN
 	BEGIN TRY
 		Delete InterviewTest.dbo.VoteItem 
 		where Sn = @Sn
+		COMMIT;
+	END TRY
+    BEGIN CATCH
+        ROLLBACK;
+    END CATCH;
+	SET NOCOUNT ON;
+END
+GO
+PRINT N'正在建立 程序 [dbo].[DeleteVoteRecord]...';
+
+
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+Create PROCEDURE [dbo].[DeleteVoteRecord]
+   @VoteItem int
+AS
+BEGIN
+	BEGIN TRANSACTION;
+	BEGIN TRY
+		Delete InterviewTest.dbo.VoteRecord 
+		where VoteItem = @VoteItem
 		COMMIT;
 	END TRY
     BEGIN CATCH

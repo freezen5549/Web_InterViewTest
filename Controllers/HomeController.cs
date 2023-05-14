@@ -91,6 +91,7 @@ namespace Web_InterViewTest.Controllers
                 TempData["ErrorMessage"] = "投票項目長度過大";
                 return RedirectToAction("View_VoteManager");
             }
+            
             if (_dbContext.SP_CheckVoteItemExist(newItem).Count() == 0)
             {
                 _dbContext.SP_SetVoteItem(newItem);
@@ -130,8 +131,9 @@ namespace Web_InterViewTest.Controllers
             {
                 return RedirectToAction("View_VoteManager");
             }
+            _dbContext.SP_DeleteVoteRecord(itemId);
             _dbContext.SP_DeleteVoteItem(itemId);
-
+            
             return RedirectToAction("View_VoteManager");
         }
     }

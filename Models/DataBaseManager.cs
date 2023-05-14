@@ -15,32 +15,57 @@ namespace Web_InterViewTest.Models
     {
         public class ApplicationDbContext : DbContext
         {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns></returns>
             public virtual IEnumerable<VoteRecord> SP_GetVoteRecord()
             {
                 return Set<VoteRecord>().FromSqlInterpolated($"EXEC GetVoteRecord").ToList();
             }
+            /// <summary>
+            /// 取得投票項目資料
+            /// </summary>
+            /// <returns></returns>
             public virtual IEnumerable<VoteItem> SP_GetVoteItem()
             {
                 return Set<VoteItem>().FromSqlInterpolated($"EXEC GetVoteItem").ToList();
             }
+            /// <summary>
+            /// 取得投票項目以及被頭總數
+            /// </summary>
+            /// <returns></returns>
             public virtual IEnumerable<VoteRecord_ItemCount> SP_GetVoteRecordItemCount()
             {
                 return Set<VoteRecord_ItemCount>().FromSqlInterpolated($"EXEC GetVoteRecordItemCount").ToList();
             }
-
+            /// <summary>
+            /// 取得投票編號，透過投票項目
+            /// </summary>
+            /// <param name="Item"></param>
+            /// <returns></returns>
             public virtual IEnumerable<VoteItem_Sn> SP_GetVoteItemSnByItem(string Item)
             {
                 var ItemParameter = new SqlParameter("@Item", Item);
                 return Set<VoteItem_Sn>().FromSqlRaw($"EXEC GetVoteItemSnByItem @Item", ItemParameter).ToList();
             }
-
+            /// <summary>
+            /// 取得投票項目，透過投票編號
+            /// </summary>
+            /// <param name="Sn"></param>
+            /// <returns></returns>
             public virtual IEnumerable<VoteItem> SP_GetVoteItemItemBySn(int Sn)
             {
                 var SnParameter = new SqlParameter("@Sn", Sn);
 
                 return Set<VoteItem>().FromSqlRaw($"EXEC GetVoteItemItemBySn @Sn", SnParameter).ToList();
             }
-
+            /// <summary>
+            /// 確認投票紀錄是否已存在
+            /// </summary>
+            /// <param name="Voter"></param>
+            /// <param name="VoterItem"></param>
+            /// <returns></returns>
             public virtual IEnumerable<VoteRecordIsExist> SP_CheckVoteRecordExist(string Voter,int VoterItem)
             {
                 var voterParameter = new SqlParameter("@Voter", Voter);
@@ -48,7 +73,11 @@ namespace Web_InterViewTest.Models
 
                 return Set<VoteRecordIsExist>().FromSqlRaw($"EXEC CheckVoteRecordExist @Voter, @VoterItem", voterParameter, voterItemParameter).ToList();
             }
-
+            /// <summary>
+            /// 確認投票項目是否已存在
+            /// </summary>
+            /// <param name="Item"></param>
+            /// <returns></returns>
             public virtual IEnumerable<VoteItem_Sn> SP_CheckVoteItemExist(string Item)
             {
                 var ItemParameter = new SqlParameter("@Item", Item);
@@ -60,33 +89,55 @@ namespace Web_InterViewTest.Models
             {
                 _connectionString = configuration.GetConnectionString("Web_InterViewTestContext");
             }
-
+            /// <summary>
+            /// 新增投票項目
+            /// </summary>
+            /// <param name="Item"></param>
             public void SP_SetVoteItem(string Item)
             {
                 Database.ExecuteSqlRaw("EXEC SetVoteItem @Parameter1",
                                        new SqlParameter("@Parameter1", Item));
             }
-
+            /// <summary>
+            /// 更新投票項目
+            /// </summary>
+            /// <param name="Sn"></param>
+            /// <param name="Item"></param>
             public void SP_UpdateVoteItem(int Sn, string Item)
             {
                 Database.ExecuteSqlRaw("EXEC UpdateVoteItem @Parameter1, @Parameter2",
                     new SqlParameter("@Parameter1", Sn),
                     new SqlParameter("@Parameter2", Item));
             }
-
+            /// <summary>
+            /// 新增投票紀錄
+            /// </summary>
+            /// <param name="Voter"></param>
+            /// <param name="VoteItem"></param>
             public void SP_SetVoteRecord(string Voter, int VoteItem)
             {
                 Database.ExecuteSqlRaw("EXEC SetVoteRecord @Parameter1, @Parameter2",
                     new SqlParameter("@Parameter1", Voter),
                     new SqlParameter("@Parameter2", VoteItem));
             }
-
+            /// <summary>
+            /// 刪除投票項目
+            /// </summary>
+            /// <param name="Sn"></param>
             public void SP_DeleteVoteItem(int Sn)
             {
                 Database.ExecuteSqlRaw("EXEC DeleteVoteItem @Parameter1",
                     new SqlParameter("@Parameter1", Sn));
             }
-
+            /// <summary>
+            /// 刪除投票紀錄
+            /// </summary>
+            /// <param name="Sn"></param>
+            public void SP_DeleteVoteRecord(int Sn)
+            {
+                Database.ExecuteSqlRaw("EXEC DeleteVoteRecord @Parameter1",
+                    new SqlParameter("@Parameter1", Sn));
+            }
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
                 if (!optionsBuilder.IsConfigured)
