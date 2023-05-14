@@ -1,0 +1,35 @@
+﻿@using static Web_InterViewTest.Models.DataBaseManager.ApplicationDbContext;
+@model IEnumerable<VoteRecord_ItemCount>
+@{
+    ViewData["Title"] = "View_VoteClient";
+}
+
+<style>
+    .table-cell {
+        border: 1px solid black;
+        padding: 5px;
+    }
+</style>
+
+<form method="post" action="/Home/SubmitSelections">
+    <table class="table-cell">
+        <thead>
+            <tr>
+                <th class="table-cell">選擇</th>
+                <th class="table-cell">可選項目</th>
+                <th class="table-cell">已被選擇數量</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr>
+                    <td class="table-cell"> <input type="checkbox" name="selectedItems" value="@record.Item" /></td>
+                    <td class="table-cell">@record.Item</td>
+                    <td class="table-cell">@record.VoteItem</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit">提交選擇</button>
+</form>
